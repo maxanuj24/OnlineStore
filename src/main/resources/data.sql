@@ -1,7 +1,9 @@
 delete from category;
 delete from Item;
 delete from User;
---delete from order;
+delete from orders;
+delete from Address;
+
 
 insert into User(id,name,phone,email) values(201,'Anuj','9799301038','maxanuj24@gmail.com');
 insert into User(id,name,phone,email) values(202,'Yash','8696912345','yashtongia1996@gmail.com');
@@ -19,3 +21,5 @@ insert into Item(id,name,categoryname,price,quantity,category_id) values(50003,'
 insert into orders(id,uid,status,user_id) values(801,202,'Delivered',202);
 insert into orders(id,uid,status,user_id) values(802,203,'Payment Pending',203);
 insert into orders(id,uid,status,user_id) values(803,201,'Just ordered',201);
+
+insert into Address(id,name,type,flat,city,pin,contact,uid,user_id) values(401,'Yash - Office','Office','4thFloor','Pune','411057','8695977461',201,201);

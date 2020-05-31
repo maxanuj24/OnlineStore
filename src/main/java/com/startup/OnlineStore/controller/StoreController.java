@@ -3,11 +3,9 @@ package com.startup.OnlineStore.controller;
 import com.startup.OnlineStore.model.Category;
 import com.startup.OnlineStore.model.Item;
 import com.startup.OnlineStore.model.Order;
+import com.startup.OnlineStore.model.Address;
 import com.startup.OnlineStore.model.User;
-import com.startup.OnlineStore.repo.CategoryRepo;
-import com.startup.OnlineStore.repo.ItemRepo;
-import com.startup.OnlineStore.repo.OrderRepo;
-import com.startup.OnlineStore.repo.UserRepo;
+import com.startup.OnlineStore.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,8 @@ public class StoreController {
     @Autowired
     OrderRepo orderRepo;
 
+    @Autowired
+    AddressRepo addressRepo;
     @Autowired
     UserRepo userRepo;
 
@@ -122,6 +122,28 @@ public class StoreController {
     @PostMapping("/updateUser")
     public void updateUser(@RequestBody User user){
         userRepo.addUser(user);
+    }
+
+    @GetMapping("/showAddress")
+    public String showAddress(){
+        return "Address Controller";
+    }
+
+    @GetMapping("/getAddress/{addressId}")
+    public ResponseEntity<Address> getAddress(@PathVariable("addressId") int addressId){
+        Address address = addressRepo.getAddress(addressId);
+        return new ResponseEntity<Address>(address, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getAddress")
+    public ResponseEntity<List<Address>> getAddresss(){
+        List<Address> address = addressRepo.getAllAddresss();
+        return new ResponseEntity<List<Address>>(address,HttpStatus.FOUND);
+    }
+
+    @PostMapping("/addAddress")
+    public void addAddress(@RequestBody Address address){
+        addressRepo.addAddress(address);
     }
 
 }

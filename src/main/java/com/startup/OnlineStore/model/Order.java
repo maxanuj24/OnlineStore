@@ -20,9 +20,18 @@ public class Order {
     @JsonBackReference
     User user;
 
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     /* @OneToMany
-    private List<Item> items = new ArrayList<>();
-    */
+        private List<Item> items = new ArrayList<>();
+        */
    /* @OneToOne
     private Address address;
     */

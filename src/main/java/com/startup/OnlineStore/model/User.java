@@ -20,9 +20,13 @@ public class User {
 
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)//
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Address> addresses = new ArrayList<>();
 
     public User() {
     }
@@ -68,28 +72,35 @@ public class User {
         orders.add(order);
     }
 
+     public void addAddress(Address address){
+        addresses.add(address);
+     }
+
 
  /*   public Cart getCart() {
         return cart;
     }*/
 
-    /*  public List<Address> getAddress() {
-          return addresses;
-      }*/
-
-
-
    /* @OneToOne(fetch = FetchType.LAZY)
     private Cart cart;
 
-    @OneToMany
-    private List<Address> addresses = new ArrayList<>();
+
 */
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", orders=" + orders +
+               // ", addresses=" + addresses +
+                '}';
+    }
 
-   /* public void addAddress(Address address){
-        addresses.add(address);
-    }*/
+
+
 /*
     public void setCart(Cart cart) {
         this.cart = cart;
