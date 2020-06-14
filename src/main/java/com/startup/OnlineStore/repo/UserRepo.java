@@ -1,5 +1,6 @@
 package com.startup.OnlineStore.repo;
 
+import com.startup.OnlineStore.model.Order;
 import com.startup.OnlineStore.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -44,10 +45,26 @@ public class UserRepo {
     }
 
     public User getUserByName(String UserName) {
-        List<User> categories = getUsers();
-        for (User User : categories) {
+        List<User> users = getUsers();
+        for (User User : users) {
             if (User.getName().equals(UserName)) {
                 return User;
+            }
+        }
+        return null;
+    }
+
+    public List<Order> getOrdersByUserId(Integer userId) {
+        User user = getUserById(userId);
+        List<Order> orders = user.getOrders();
+        return orders;
+    }
+    public Order getOrderByUserIdAndOrderId(Integer userId,Integer orderId) {
+        User user = getUserById(userId);
+        List<Order> orders = user.getOrders();
+        for(Order order:orders){
+            if(order.getId()==orderId){
+                return order;
             }
         }
         return null;

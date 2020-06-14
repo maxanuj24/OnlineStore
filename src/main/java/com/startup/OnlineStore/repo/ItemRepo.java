@@ -1,6 +1,5 @@
 package com.startup.OnlineStore.repo;
 
-import com.startup.OnlineStore.model.Category;
 import com.startup.OnlineStore.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,9 +20,6 @@ public class ItemRepo{
     @Autowired
     EntityManager em;
 
-    @Autowired
-    CategoryRepo categoryRepo;
-
     public Item getItem(Integer itemId) {
         return em.find(Item.class,itemId);
     }
@@ -38,11 +34,11 @@ public class ItemRepo{
     }
 
     public void addItem(Item item) {
-        String categoryName = item.getCategoryname();
-        Category category = categoryRepo.getCategoryByName(categoryName);
+        ///String categoryName = item.getCategoryname();
+        ///Category category = categoryRepo.getCategoryByName(categoryName);
 
-        category.addItems(item);
-        item.setCategory(category);
+        //category.addItems(item);
+       // item.setCategory(category);
         em.persist(item);
 
     }

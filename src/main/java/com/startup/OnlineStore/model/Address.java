@@ -25,7 +25,6 @@ public class Address {
     @JsonBackReference
     User user;
 
-
     public Address() {
     }
     public Address(String name, String type, String flat, String city, int pin, String contact, int uid) {
@@ -36,10 +35,6 @@ public class Address {
         this.pin = pin;
         this.contact = contact;
         this.uid = uid;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public User getUser() {
@@ -105,7 +100,10 @@ public class Address {
         this.uid = uid;
     }
 
-   /* @Override
+    /*public List<Order> getOrders() {
+        return orders;
+    }*/
+/* @Override
     public String toString() {
         return "Address{" +
                 "id=" + id +

@@ -1,6 +1,5 @@
 package com.startup.OnlineStore.repo;
 
-import com.startup.OnlineStore.model.Category;
 import com.startup.OnlineStore.model.Address;
 import com.startup.OnlineStore.model.User;
 import org.springframework.beans.factory.annotation.Autowired;

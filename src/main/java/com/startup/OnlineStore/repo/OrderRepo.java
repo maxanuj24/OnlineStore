@@ -21,16 +21,26 @@ public class OrderRepo {
 
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    AddressRepo addressRepo;
 
     public void addOrder(Order order) {
         int userId = order.getUid();
         User user = userRepo.getUserById(userId);
-
+        Address address = addressRepo.getAddress(order.getAddrid());
+       // address.addOrder(order);
+        List<Item> items = order.getItems();
+            order.setItems(items);
         user.addOrder(order);
         order.setUser(user);
+       // order.setAddress(address);
         em.persist(order);
     }
-
+    public void addItemToOrder(Item item,int oid) {
+        Order order = getOrder(oid);
+        order.addItem(item);
+        //  em.persist(order);
+    }
     public List<Order> getAllOrders() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Order> cq = cb.createQuery(Order.class);

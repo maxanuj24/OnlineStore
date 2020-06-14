@@ -10,14 +10,11 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String categoryname;
     private String name;
     private Float  price;
     private int quantity;
+    private Category categoryname;
 
-    @ManyToOne//(cascade = CascadeType.ALL)
-    @JsonBackReference
-    private Category category;
 
     public Item() {
     }
@@ -33,11 +30,11 @@ public class Item {
                 '}';
     }
 
-    public String getCategoryname() {
+    public Category getCategoryname() {
         return categoryname;
     }
 
-    public void setCategoryname(String categoryname) {
+    public void setCategoryname(Category categoryname) {
         this.categoryname = categoryname;
     }
 
@@ -65,19 +62,11 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     public int getId() {
         return id;
     }
 
-    public Item(String categoryname, String name, Float price, int quantity) {
+    public Item(Category categoryname, String name, Float price, int quantity) {
         this.categoryname = categoryname;
         this.name = name;
         this.price = price;

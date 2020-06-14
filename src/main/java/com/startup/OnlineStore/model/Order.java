@@ -1,7 +1,6 @@
 package com.startup.OnlineStore.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,34 +12,39 @@ public class Order {
     @Id
     @GeneratedValue
     private int id;
-    private int uid;
+    private int uid; //userId
+    private int addrid; //addressId
     private String status;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonBackReference
     User user;
 
-
-    public Address getAddress() {
-        return address;
+    @Column
+    @ManyToMany(cascade = CascadeType.ALL)
+    List<Item> items = new ArrayList<Item>();
+    public void addItem(Item item) {
+        items.add(item);
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public List<Item> getItems() {
+        return items;
+    }
+    public int getAddrid() {
+        return addrid;
     }
 
-    /* @OneToMany
-        private List<Item> items = new ArrayList<>();
-        */
-   /* @OneToOne
-    private Address address;
-    */
+    public void setAddrid(int addrid) {
+        this.addrid = addrid;
+    }
+
     public Order() {
     }
 
-    public Order(int uid, String status) {
+    public Order(int uid, String status,int addrid) {
         this.uid = uid;
         this.status = status;
+        this.addrid = addrid;
     }
     public int getUid() {
         return uid;
@@ -74,10 +78,11 @@ public class Order {
                 "id=" + id +
                 ", uid=" + uid +
                 ", status='" + status + '\'' +
-                //  ", items=" + items +
-                //  ", address=" + address +
                 ", user=" + user +
                 '}';
     }
 
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
 }

@@ -1,5 +1,6 @@
 package com.startup.OnlineStore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -20,8 +21,9 @@ public class User {
 
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.LAZY)
+    //@JsonManagedReference
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.LAZY)
@@ -94,7 +96,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", orders=" + orders +
+               // ", orders=" + orders +
                // ", addresses=" + addresses +
                 '}';
     }
