@@ -1,9 +1,6 @@
 package com.startup.OnlineStore.controller;
 
-import com.startup.OnlineStore.model.Item;
-import com.startup.OnlineStore.model.Order;
-import com.startup.OnlineStore.model.Address;
-import com.startup.OnlineStore.model.User;
+import com.startup.OnlineStore.model.*;
 import com.startup.OnlineStore.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +14,15 @@ public class StoreController {
     @Autowired
     ItemRepo itemRepo;
     @Autowired
-
     OrderRepo orderRepo;
 
     @Autowired
     AddressRepo addressRepo;
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    MerchantRepo merchantRepo;
 
     @GetMapping("/showItems")
     public String get(){
@@ -47,11 +46,14 @@ public class StoreController {
         itemRepo.addItem(item);
     }
 
+//---------------------------------------------------------------------------
 
     @GetMapping("/healthCheckCategory")
     public String getCategory(){
         return "Category Controller Alive";
     }
+
+//---------------------------------------------------------------------------
 
     @GetMapping("/showOrders")
     public String showOrder(){
@@ -75,6 +77,42 @@ public class StoreController {
         orderRepo.addOrder(order);
     }
 
+    @GetMapping("/getAllOrders/{userId}")
+    public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable("userId") int userId){
+        List<Order> orders = userRepo.getOrdersByUserId(userId);
+        if(orders!=null)
+            return  new ResponseEntity<List<Order>>(orders,HttpStatus.FOUND);
+        else
+            return new ResponseEntity<List<Order>>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/getOrder/{userId}/{orderId}")
+    public ResponseEntity<Order> getOrdersByOrderId(@PathVariable("userId") int userId,@PathVariable("orderId") int orderId){
+        Order order = userRepo.getOrderByUserIdAndOrderId(userId,orderId);
+        if(order!=null)
+            return  new ResponseEntity<Order>(order,HttpStatus.FOUND);
+        else
+            return new ResponseEntity<Order>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/getOrdersByMerchant/{merchantId}")
+    public ResponseEntity<List<Order>> getOrdersByMerchantId(@PathVariable("merchantId") int merchantId){
+
+        List<Order> orders = orderRepo.getOrdersByMerchantId(merchantId);
+        if(orders!=null)
+            return  new ResponseEntity<List<Order>>(orders,HttpStatus.FOUND);
+            return new ResponseEntity<List<Order>>(HttpStatus.NOT_FOUND);
+    }
+    @GetMapping("/getOrdersByMerchantAndStatus/{merchantId}/{status}")
+    public ResponseEntity<List<Order>> getOrdersByMerchantIdAndStatus(@PathVariable("merchantId") int merchantId,@PathVariable("status") String status){
+        List<Order> orders =  orderRepo.getOrdersByMerchantIdAndStatus(merchantId,status);
+        if(orders!=null)
+        return new ResponseEntity<List<Order>>(orders,HttpStatus.FOUND);
+        return new ResponseEntity<List<Order>>(orders,HttpStatus.NOT_FOUND);
+    }
+//---------------------------------------------------------------------------
+
+
     @GetMapping("/healthCheckUser")
     public String getUser(){
         return "User Controller Alive";
@@ -96,10 +134,12 @@ public class StoreController {
         userRepo.addUser(user);
         return new ResponseEntity<User>(user,HttpStatus.CREATED);
     }
-    @PostMapping("/updateUser")
+    @PutMapping("/updateUser")
     public void updateUser(@RequestBody User user){
         userRepo.addUser(user);
     }
+
+    //---------------------------------------------------------------------------
 
     @GetMapping("/showAddress")
     public String showAddress(){
@@ -112,8 +152,8 @@ public class StoreController {
         return new ResponseEntity<Address>(address, HttpStatus.CREATED);
     }
 
-    @GetMapping("/getAddress")
-    public ResponseEntity<List<Address>> getAddresss(){
+    @GetMapping("/getAddresses")
+    public ResponseEntity<List<Address>> getAddresses(){
         List<Address> address = addressRepo.getAllAddresss();
         return new ResponseEntity<List<Address>>(address,HttpStatus.FOUND);
     }
@@ -123,68 +163,41 @@ public class StoreController {
         addressRepo.addAddress(address);
     }
 
-    @GetMapping("/getAllOrders/{userId}")
-    public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable("userId") int userId){
-        List<Order> orders = userRepo.getOrdersByUserId(userId);
-        if(orders!=null)
-            return  new ResponseEntity<List<Order>>(orders,HttpStatus.FOUND);
-        else
-            return new ResponseEntity<List<Order>>(HttpStatus.NOT_FOUND);
+//---------------------------------------------------------------------------
+
+
+    @GetMapping("/getMerchant/{m_Id}")
+    public ResponseEntity<Merchant> getMerchantByMerchantId(@PathVariable("m_Id") int m_Id){
+        Merchant merchant =  merchantRepo.getOne(m_Id);
+           if(merchant!=null)
+            return  new ResponseEntity<Merchant>(merchant,HttpStatus.FOUND);
+            return new ResponseEntity<Merchant>(HttpStatus.NOT_FOUND);
     }
-    @GetMapping("/getOrder/{userId}/{orderId}")
-    public ResponseEntity<Order> getOrdersByUserId(@PathVariable("userId") int userId,@PathVariable("orderId") int orderId){
-        Order order = userRepo.getOrderByUserIdAndOrderId(userId,orderId);
-        if(order!=null)
-        return  new ResponseEntity<Order>(order,HttpStatus.FOUND);
-        else
-            return new ResponseEntity<Order>(HttpStatus.NOT_FOUND);
+    @GetMapping("/getMerchants")
+    public ResponseEntity<List<Merchant>> getAllMerchants(){
+        List<Merchant> merchants =  merchantRepo.findAll();
+        if(merchants!=null)
+            return  new ResponseEntity<List<Merchant>>(merchants,HttpStatus.FOUND);
+        return new ResponseEntity<List<Merchant>>(HttpStatus.NOT_FOUND);
     }
+
+    @PostMapping("/addMerchant")
+    public ResponseEntity<Merchant> addMerchant(@RequestBody Merchant merchant){
+           merchantRepo.save(merchant);
+        return  new ResponseEntity<Merchant>(merchant,HttpStatus.CREATED);
+    }
+
+    @PostMapping("/updateMerchant/{m_Id}")
+    public ResponseEntity<Merchant> updateMerchant(@PathVariable("m_Id")int m_Id,@RequestBody Merchant merchant){
+        Merchant merchant1 = merchantRepo.save(merchant);
+        return  new ResponseEntity<Merchant>(merchant1,HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/deleteMerchant/{m_Id}")
+    public ResponseEntity<Merchant> deleteMerchant(@PathVariable("m_Id")int m_Id){
+        merchantRepo.deleteById(m_Id);
+        return  new ResponseEntity<Merchant>(HttpStatus.OK);
+    }
+
 }
 
-
-/*
-
-    @GetMapping("/getCategory/{categoryId}")
-    public ResponseEntity<Category> getCategory(@PathVariable("categoryId") int categoryId){
-        Category category = categoryRepo.getCategoryById(categoryId);
-        return new ResponseEntity<Category>(category,HttpStatus.FOUND);
-    }
-
-    @GetMapping("/getCategories")
-    public ResponseEntity<List<Category>> getCategories(){
-        List<Category> categories = categoryRepo.getCategories();
-        return new ResponseEntity<List<Category>>(categories,HttpStatus.FOUND);
-    }
-    @PostMapping(value = "/addCategory",consumes = "application/json")
-    public ResponseEntity<Category> addCategory(@RequestBody Category category){
-        categoryRepo.addCategory(category);
-        return new ResponseEntity<Category>(category,HttpStatus.CREATED);
-    }
-    @PostMapping("/updateCategory")
-    public void updateCategory(@RequestBody Category category){
-        categoryRepo.addCategory(category);
-    }
-*/
-/*
-
-    @GetMapping("/getCategory/{categoryId}")
-    public ResponseEntity<Category> getCategory(@PathVariable("categoryId") int categoryId){
-        Category category = categoryRepo.getCategoryById(categoryId);
-        return new ResponseEntity<Category>(category,HttpStatus.FOUND);
-    }
-
-    @GetMapping("/getCategories")
-    public ResponseEntity<List<Category>> getCategories(){
-        List<Category> categories = categoryRepo.getCategories();
-        return new ResponseEntity<List<Category>>(categories,HttpStatus.FOUND);
-    }
-    @PostMapping(value = "/addCategory",consumes = "application/json")
-    public ResponseEntity<Category> addCategory(@RequestBody Category category){
-        categoryRepo.addCategory(category);
-        return new ResponseEntity<Category>(category,HttpStatus.CREATED);
-    }
-    @PostMapping("/updateCategory")
-    public void updateCategory(@RequestBody Category category){
-        categoryRepo.addCategory(category);
-    }
-*/

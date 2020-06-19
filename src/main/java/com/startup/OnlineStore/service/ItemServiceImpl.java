@@ -1,6 +1,6 @@
 //package com.startup.OnlineStore.service;
 //
-//import com.startup.OnlineStore.model.Category;
+//import com.startup.OnlineStore.Enum.Category;
 //import com.startup.OnlineStore.model.Item;
 //import com.startup.OnlineStore.repo.CategoryRepo;
 //import com.startup.OnlineStore.repo.ItemRepo;

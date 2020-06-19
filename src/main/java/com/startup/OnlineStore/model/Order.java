@@ -1,6 +1,8 @@
 package com.startup.OnlineStore.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.startup.OnlineStore.Enum.OrderStatus;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,13 @@ public class Order {
     @GeneratedValue
     private int id;
     private int uid; //userId
+
+
+    private int m_id; //merchantId
     private int addrid; //addressId
-    private String status;
+
+
+    private OrderStatus orderStatus;
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonBackReference
@@ -41,10 +48,11 @@ public class Order {
     public Order() {
     }
 
-    public Order(int uid, String status,int addrid) {
+    public Order(int uid, int m_id,OrderStatus orderStatus,int addrid) {
         this.uid = uid;
-        this.status = status;
+        this.orderStatus = orderStatus;
         this.addrid = addrid;
+        this.m_id = m_id;
     }
     public int getUid() {
         return uid;
@@ -54,13 +62,14 @@ public class Order {
         this.uid = uid;
     }
 
-    public String getStatus() {
-        return status;
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
+
     public User getUser() {
         return user;
     }
@@ -72,12 +81,20 @@ public class Order {
         return id;
     }
 
+    public int getM_id() {
+        return m_id;
+    }
+
+    public void setM_id(int m_id) {
+        this.m_id = m_id;
+    }
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
+                ", mid=" + m_id +
                 ", uid=" + uid +
-                ", status='" + status + '\'' +
+                ", status='" + orderStatus + '\'' +
                 ", user=" + user +
                 '}';
     }

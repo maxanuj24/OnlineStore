@@ -1,6 +1,8 @@
 package com.startup.OnlineStore.repo;
 
 import com.startup.OnlineStore.model.*;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import com.startup.OnlineStore.model.Item;
 
@@ -53,5 +56,27 @@ public class OrderRepo {
 
     public Order getOrder(int orderId) {
         return em.find(Order.class,orderId);
+    }
+
+    public List<Order> getOrdersByMerchantId(int merchantId) {
+        List<Order> allOrders = getAllOrders();
+        List<Order> orders = new ArrayList<>();
+        for(Order order:orders){
+            if(order.getM_id()==merchantId){
+                   orders.add(order);
+            }
+        }
+        return orders;
+    }
+
+    public List<Order> getOrdersByMerchantIdAndStatus(int merchantId,String status) {
+        List<Order> allOrders = getOrdersByMerchantId(merchantId);
+        List<Order> orders = new ArrayList<>();
+        for(Order order:orders){
+            if(order.getOrderStatus().equals(status)){
+                orders.add(order);
+            }
+        }
+        return orders;
     }
 }
