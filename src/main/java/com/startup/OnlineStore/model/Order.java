@@ -21,7 +21,7 @@ public class Order {
     private int addrid; //addressId
 
 
-    private OrderStatus orderStatus;
+    private OrderStatus orderstatus;
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonBackReference
@@ -50,7 +50,7 @@ public class Order {
 
     public Order(int uid, int m_id,OrderStatus orderStatus,int addrid) {
         this.uid = uid;
-        this.orderStatus = orderStatus;
+        this.orderstatus = orderStatus;
         this.addrid = addrid;
         this.m_id = m_id;
     }
@@ -63,11 +63,11 @@ public class Order {
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+        this.orderstatus = orderStatus;
     }
 
     public OrderStatus getOrderStatus() {
-        return orderStatus;
+        return orderstatus;
     }
 
     public User getUser() {
@@ -94,7 +94,7 @@ public class Order {
                 "id=" + id +
                 ", mid=" + m_id +
                 ", uid=" + uid +
-                ", status='" + orderStatus + '\'' +
+                ", status='" + orderstatus + '\'' +
                 ", user=" + user +
                 '}';
     }

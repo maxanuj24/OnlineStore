@@ -1,13 +1,28 @@
 package com.startup.OnlineStore.controller;
 
+import com.startup.OnlineStore.OnlineStoreApplication;
 import com.startup.OnlineStore.model.*;
 import com.startup.OnlineStore.repo.*;
+
+import com.sun.rmi.rmid.ExecOptionPermission;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import javax.xml.ws.Response;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Date;
 import java.util.List;
+/*
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;*/
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class StoreController {
@@ -15,15 +30,14 @@ public class StoreController {
     ItemRepo itemRepo;
     @Autowired
     OrderRepo orderRepo;
-
     @Autowired
     AddressRepo addressRepo;
     @Autowired
     UserRepo userRepo;
-
     @Autowired
     MerchantRepo merchantRepo;
-
+    @Autowired
+    LoginRepo loginRepo;
     @GetMapping("/showItems")
     public String get(){
             return "Items Controller";
@@ -198,6 +212,67 @@ public class StoreController {
         merchantRepo.deleteById(m_Id);
         return  new ResponseEntity<Merchant>(HttpStatus.OK);
     }
+//-----------------------------------------------------------------------------------------
+//Logger log = LogFactory.getLogger(this.getClass());
+    @PostMapping("/user")
+    public ResponseEntity<User> getUser(@RequestBody Login login){
 
+        User user = loginRepo.getUser(login);
+        if(user==null)
+        return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<User>(user,HttpStatus.FOUND);
+    }/*
+    @Autowired
+    RestTemplate restTemplate;*/
+
+   /* @GetMapping("/hi")
+    public ResponseEntity<Object> callApi() {
+        Object obj = restTemplate.getForObject("http://dummy.restapiexample.com/api/v1/employees", Object.class);
+        return new ResponseEntity<Object>(obj, HttpStatus.FOUND);
+    }*/
+
+    @GetMapping("/rest/getMerchants")
+    public ResponseEntity<List<Merchant>> getMerchants(){
+        List<Merchant> merchants =  merchantRepo.findAll();
+        if(merchants!=null)
+            return  new ResponseEntity<List<Merchant>>(merchants,HttpStatus.FOUND);
+        return new ResponseEntity<List<Merchant>>(HttpStatus.NOT_FOUND);
+    }
+
+    //get orders for merchantId
+    @GetMapping("/getOrdersByMerchantId/{m_id}")
+    public ResponseEntity<List<Order>> getOrdersByMerchant(@PathVariable("m_id")int m_id){
+        List<Order> orders = orderRepo.getOrdersByMerchantId(m_id);
+        if(orders!=null)
+            return new ResponseEntity<List<Order>>(orders,HttpStatus.FOUND);
+        return new ResponseEntity<List<Order>>(orders,HttpStatus.NOT_FOUND);
+    }
+    private static final Logger LOG = LoggerFactory.getLogger(StoreController.class);
+    @GetMapping("/elk")
+    public String helloWorld(){
+        String response  = "welcome to ELK Stack"+new Date();
+        LOG.info(response);
+        return response;
+    }
+
+    @GetMapping("/exception")
+    public String helloWorldException(){
+        String response  = "";
+        try{
+            throw  new Exception("Exception has occured ....");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String stackTrace = sw.toString();
+            LOG.error("Exception - " + stackTrace);
+            response = stackTrace;
+            //LOG.error(e+"");
+        }
+        LOG.error(response);
+        return response;
+    }
 }
 

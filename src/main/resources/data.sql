@@ -13,9 +13,9 @@ insert into User(id,name,phone,email) values(203,'Chits','7891004007','chitraksh
 --insert into Category(id,name) values(10002,'Vegetable');
 --insert into Category(id,name) values(10003,'Grocery');
 
-insert into Item(id,name,categoryname,price,quantity,m_id) values(50001,'Apple',1,100,5,101);
-insert into Item(id,name,categoryname,price,quantity,m_id) values(50002,'Banana',5,20,4,102);
-insert into Item(id,name,categoryname,price,quantity,m_id) values(50003,'Sugar',4,40,3,101);
+insert into Item(id,name,categoryname,price,quantity,m_id) values(50001,'Apple',1,100,5,100);
+insert into Item(id,name,categoryname,price,quantity,m_id) values(50002,'Banana',5,20,4,100);
+insert into Item(id,name,categoryname,price,quantity,m_id) values(50003,'Sugar',4,40,3,100);
 
 --insert into orders(id,uid,m_id,addrid,orderStatus,user_id) values(801,202,'Delivered',401,202);
 --insert into orders(id,uid,m_id,addrid,orderStatus,user_id) values(802,203,'Payment Pending',403,203);
